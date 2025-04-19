@@ -1,24 +1,24 @@
 {
-	"name": "DF_DIM_RESULT",
+	"name": "DF_DIM_Violations",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Parquet_DimResult",
+						"referenceName": "Parquet_DimViolations",
 						"type": "DatasetReference"
 					},
-					"name": "SourceResult"
+					"name": "sourceDimViolation"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Snowflake_DimResult",
+						"referenceName": "Snowflake_DimViolation",
 						"type": "DatasetReference"
 					},
-					"name": "sinkDimResult"
+					"name": "sinkDimViolations"
 				}
 			],
 			"transformations": [
@@ -32,14 +32,15 @@
 				"     CREATED_DATE as date (currentDate())",
 				"}",
 				"source(output(",
-				"          RESULTS as string,",
-				"          RESULT_SK as integer",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          VIOLATION_CODE as string,",
+				"          VIOLATION_SK as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     format: 'parquet') ~> SourceResult",
-				"SourceResult derive(JOB_ID = $JOB_ID,",
+				"     format: 'parquet') ~> sourceDimViolation",
+				"sourceDimViolation derive(JOB_ID = $JOB_ID,",
 				"          CREATED_DATE = $CREATED_DATE) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -50,7 +51,14 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true) ~> sinkDimResult"
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          VIOLATION_DESCRIPTION,",
+				"          VIOLATION_CODE,",
+				"          VIOLATION_SK,",
+				"          JOB_ID,",
+				"          CREATED_DATE",
+				"     )) ~> sinkDimViolations"
 			]
 		}
 	}
