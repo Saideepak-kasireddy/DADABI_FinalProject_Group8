@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "Dim_Inspection",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
