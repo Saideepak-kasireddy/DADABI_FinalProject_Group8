@@ -1,0 +1,69 @@
+{
+	"name": "DF_DIM_FACILITY",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Parquet_Facility",
+						"type": "DatasetReference"
+					},
+					"name": "sourceFacility"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Snowflake_DimFacility",
+						"type": "DatasetReference"
+					},
+					"name": "sinkDimFacility"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     JOB_ID as string (\"10\"),",
+				"     CREATED_DATE as date (currentDate())",
+				"}",
+				"source(output(",
+				"          FACILITY_SK as integer,",
+				"          LICENSE_NUMBER as string,",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          FACILITY_TYPE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sourceFacility",
+				"sourceFacility derive(JOB_ID = $JOB_ID,",
+				"          CREATED_DATE = $CREATED_DATE) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          FACILITY_SK,",
+				"          LICENSE_NUMBER,",
+				"          DBA_NAME,",
+				"          AKA_NAME,",
+				"          FACILITY_TYPE,",
+				"          JOB_ID,",
+				"          CREATED_DATE",
+				"     )) ~> sinkDimFacility"
+			]
+		}
+	}
+}
