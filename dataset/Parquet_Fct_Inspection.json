@@ -1,0 +1,20 @@
+{
+	"name": "Parquet_Fct_Inspection",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLSFinal",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Fact_Inspection.parquet",
+				"fileSystem": "silver"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

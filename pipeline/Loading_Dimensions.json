@@ -198,6 +198,8 @@
 			{
 				"name": "Dim_Location",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Dim_Facility",
@@ -217,6 +219,44 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "DF_DIM_LOCATION",
+						"type": "DataFlowReference",
+						"parameters": {
+							"JOB_ID": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							},
+							"CREATED_DATE": "currentDate()"
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Fct_Inspection",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Dim_Location",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_FCT_INSPECTION",
 						"type": "DataFlowReference",
 						"parameters": {
 							"JOB_ID": {

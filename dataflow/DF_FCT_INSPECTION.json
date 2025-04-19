@@ -1,0 +1,75 @@
+{
+	"name": "DF_FCT_INSPECTION",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Parquet_Fct_Inspection",
+						"type": "DatasetReference"
+					},
+					"name": "sourceFctInspection"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Snowflake_FctInspection",
+						"type": "DatasetReference"
+					},
+					"name": "sinkFctInspection"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     JOB_ID as string (\"10\"),",
+				"     CREATED_DATE as date (currentDate())",
+				"}",
+				"source(output(",
+				"          INSPECTION_SK as integer,",
+				"          FACILITY_SK as integer,",
+				"          LOCATION_SK as integer,",
+				"          RESULT_SK as integer,",
+				"          DATE_SK as integer,",
+				"          INSPECTION_TYPE_SK as integer,",
+				"          RISK_SK as integer,",
+				"          Inspection_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sourceFctInspection",
+				"sourceFctInspection derive(JOB_ID = $JOB_ID,",
+				"          CREATED_DATE = $CREATED_DATE) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          INSPECTION_SK,",
+				"          FACILITY_SK,",
+				"          LOCATION_SK,",
+				"          RESULT_SK,",
+				"          DATE_SK,",
+				"          INSPECTION_TYPE_SK,",
+				"          RISK_SK,",
+				"          INSPECTION_ID = Inspection_ID,",
+				"          JOB_ID,",
+				"          CREATED_DATE",
+				"     )) ~> sinkFctInspection"
+			]
+		}
+	}
+}
