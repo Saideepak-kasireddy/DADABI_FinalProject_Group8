@@ -1,0 +1,16 @@
+{
+	"name": "Snowflake_DimInspection",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeFinal",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "FI_SCHEMA",
+			"table": "DIM_INSPECTION_TYPE"
+		}
+	}
+}

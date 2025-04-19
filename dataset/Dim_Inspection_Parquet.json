@@ -1,0 +1,20 @@
+{
+	"name": "Dim_Inspection_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLSFinal",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Dim_Inspection_Type.parquet",
+				"fileSystem": "silver"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

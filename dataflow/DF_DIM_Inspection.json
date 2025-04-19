@@ -1,0 +1,63 @@
+{
+	"name": "DF_DIM_Inspection",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Dim_Inspection_Parquet",
+						"type": "DatasetReference"
+					},
+					"name": "SourceInspection"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Snowflake_DimInspection",
+						"type": "DatasetReference"
+					},
+					"name": "sinkInspection"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     JOB_ID as string (\"10\"),",
+				"     Created_Date as date (currentDate())",
+				"}",
+				"source(output(",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_TYPE_SK as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> SourceInspection",
+				"SourceInspection derive(JOB_ID = $JOB_ID,",
+				"          CREATED_DATE = $Created_Date) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_TYPE_SK,",
+				"          JOB_ID,",
+				"          CREATED_DATE",
+				"     )) ~> sinkInspection"
+			]
+		}
+	}
+}
