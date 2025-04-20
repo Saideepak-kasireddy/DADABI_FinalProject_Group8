@@ -9,9 +9,7 @@
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": "Location_Dim.parquet",
-				"fileSystem": "silver"
+				"type": "AzureBlobFSLocation"
 			},
 			"compressionCodec": "snappy"
 		},

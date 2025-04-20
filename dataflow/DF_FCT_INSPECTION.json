@@ -15,10 +15,10 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Snowflake_FctInspection",
+						"referenceName": "Snowflake_FACT",
 						"type": "DatasetReference"
 					},
-					"name": "sinkFctInspection"
+					"name": "sinkFCTINSPECTION"
 				}
 			],
 			"transformations": [
@@ -39,6 +39,7 @@
 				"          DATE_SK as integer,",
 				"          INSPECTION_TYPE_SK as integer,",
 				"          RISK_SK as integer,",
+				"          VIOLATION_SK as integer,",
 				"          Inspection_ID as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
@@ -65,10 +66,11 @@
 				"          DATE_SK,",
 				"          INSPECTION_TYPE_SK,",
 				"          RISK_SK,",
+				"          VIOLATION_SK,",
 				"          INSPECTION_ID = Inspection_ID,",
 				"          JOB_ID,",
 				"          CREATED_DATE",
-				"     )) ~> sinkFctInspection"
+				"     )) ~> sinkFCTINSPECTION"
 			]
 		}
 	}
