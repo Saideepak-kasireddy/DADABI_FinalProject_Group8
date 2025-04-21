@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "FI_SCHEMA",
-			"table": "FCT_INSPECTION"
+			"table": "FACT_INSPECTION"
 		}
 	}
 }

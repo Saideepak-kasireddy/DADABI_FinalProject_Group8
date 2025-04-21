@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "FCT_INSPECTION.parquet",
+				"fileName": "FCT_Inspection.parquet",
 				"fileSystem": "silver"
 			},
 			"compressionCodec": "snappy"
